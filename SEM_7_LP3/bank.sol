@@ -1,28 +1,39 @@
-// SPDX-License-Identifier: MIT  
-pragma solidity ^0.8.0;          // Version declaration for the Solidity compiler, ensuring compatibility with version 0.8.0 or later
+// SPDX-License-Identifier: MIT
+pragma solidity >= 0.7.0;
+// Write  a  smart  contract  on  a  test  network,  for  Bank  account  of  a  customer  for
+  // following operations: Deposit money | Withdraw Money | Show balance
+contract Bank{
+    mapping(address => uint) public user_account;
+    mapping(address => bool) public user_exist;
 
-contract BankAccount {           // Define a contract named 'BankAccount'
+    function create_account() public payable returns(string memory){
+        require(user_exist[msg.sender] == false, "Account Already created!");
+        user_account[msg.sender] = msg.value;
+        user_exist[msg.sender] = true;
+        return "Account created";
+    }
+
+    function deposit(uint amount) public payable returns(string memory){
+        require(user_exist[msg.sender] == true, "Account not created!");
+        require(amount > 0, "Amount should be greater than 0");
+        user_account[msg.sender] += amount;
+        return "Amount deposisted sucessfully";
+    }
+
+    function withdraw(uint amount) public payable returns(string memory){
+        require(user_exist[msg.sender] == true, "Account not created!");
+        require(amount > 0, "Amount should be greater than 0");
+        require(user_account[msg.sender] >= amount, "Amount is greater than money deposisted");
+        user_account[msg.sender] -= amount;
+        return "Amount withdrawn sucessfully";    
+    }
+
+    function account_balance() public view returns(uint){
+        return user_account[msg.sender];
+    }
     
-    // State variables
-    address public owner;        // Declare a public variable 'owner' of type 'address', stores the owner's Ethereum address
-    uint public balance;          // Declare a public variable 'balance' of type 'uint' to store the bank account balance
-
-    // Constructor
-    constructor() {               // Constructor function, which runs once when the contract is deployed
-        owner = msg.sender;       // Set the 'owner' to the address that deployed the contract (msg.sender)
+    function account_exists() public view returns(bool){
+        return user_exist[msg.sender];
     }
 
-    // Functions
-    function deposit(uint amount) public {    // 'deposit' function to add funds to the balance (amount is passed as parameter)
-        balance += amount;                    // Add the 'amount' to the current balance
-    }
-
-    function withdraw(uint amount) public {  // 'withdraw' function to remove funds from the balance (amount is passed as parameter)
-        require(balance >= amount, "Insufficient balance"); // Ensure the account has enough balance before proceeding, if not, throw error
-        balance -= amount;                   // Subtract the 'amount' from the current balance
-    }
-
-    function getBalance() public view returns (uint) {   // 'getBalance' function to check the current balance
-        return balance;                                  // Return the current balance
-    }
 }
