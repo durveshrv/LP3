@@ -1,81 +1,113 @@
-// Specify the Solidity version
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-// Define the StudentRegistry contract
-contract StudentRegistry {
-
-    // Define a structure 'Student' to store student data
+contract StudManagement {
     struct Student {
-        string name;       // Name of the student
-        uint rollNo;       // Roll number of the student
-        string course;     // Course the student is enrolled in
+        uint id;
+        string name;
+        uint age;
+        string course;
     }
 
-    // Array to store all student data
-    Student[] public students;
+    Student[] public stud;
 
-    // Mapping from roll number to index in the students array
-    // Used to efficiently fetch a student's data by roll number
-    mapping(uint => uint) private rollNoToIndex;
+    mapping(uint => bool) public StudExists;
 
-    // Counter for the total number of students
-    uint public studentCount;
+    event StudentAdded(uint id, string name, uint age, string course);
+    event FallBackTrigger(address sender, uint amount, string message);
 
-    // Events to log actions in the contract
-    event StudentAdded(string name, uint rollNo, string course);     // Triggered when a student is added
-    event EtherReceived(address sender, uint amount);                // Triggered when Ether is received
-    event FallbackTriggered(address sender, uint amount);            // Triggered for unexpected function calls
+    function add_stud(uint _id, string memory _name, uint _age, string memory _course) public {
+        require(!StudExists[_id], "Student with that ID already exists!");
 
-    // Function to add a new student to the registry
-    function addStudent(string memory name, uint rollNo, string memory course) public {
-        // Ensure that no student with the same roll number already exists
-        require(rollNoToIndex[rollNo] == 0, "Student with this roll number already exists");
+        Student memory newStud = Student({
+            id: _id,
+            name: _name,
+            age: _age,
+            course: _course
+        });
 
-        // Add the new student to the students array
-        students.push(Student(name, rollNo, course));
+        stud.push(newStud);
+        StudExists[_id] = true;
 
-        // Store the index (index + 1 to differentiate from default 0 value)
-        rollNoToIndex[rollNo] = students.length;
-
-        // Increase the student count
-        studentCount++;
-
-        // Emit an event that a student has been added
-        emit StudentAdded(name, rollNo, course);
+        emit StudentAdded(_id, _name, _age, _course);
     }
 
-    // Function to get a student's details by roll number
-    function getStudentByRollNo(uint rollNo) public view returns (string memory name, uint rollNoOut, string memory course) {
-        // Fetch the index of the student from the mapping
-        uint index = rollNoToIndex[rollNo];
-
-        // Ensure that the student exists (index must be greater than 0)
-        require(index > 0, "Student with this roll number does not exist");
-
-        // Access the student data from the array (subtract 1 from index as the mapping stored index + 1)
-        Student storage student = students[index - 1];
-
-        // Return the student's data
-        return (student.name, student.rollNo, student.course);
+    function tot_student() public view returns (uint) {
+        return stud.length;
     }
 
-    // Function to get the entire list of students
-    function getAllStudents() public view returns (Student[] memory) {
-        // Return the entire students array
-        return students;
+    function getAllstud () public view returns (Student [] memory){
+        return stud;
     }
 
-    // Fallback function to handle calls with invalid function signatures
-    // This function is triggered if someone sends Ether with no data or an invalid function call
+    function getStud(uint _index) public view returns (uint, string memory, uint, string memory) {
+        require(_index < stud.length, "Invalid student index!");
+
+        Student memory s = stud[_index];
+
+        return (s.id, s.name, s.age, s.course);
+    }
+
+    function updateStud(uint _id, string memory _name, uint _age, string memory _course) public {
+    require(StudExists[_id], "Student with that ID does not exist!");
+
+    for (uint i = 0; i < stud.length; i++) {
+        if (stud[i].id == _id) {
+            stud[i].name = _name;
+            stud[i].age = _age;
+            stud[i].course = _course;
+            emit StudentAdded(_id, _name, _age, _course); // Emit the same event to indicate an update
+            return;
+            }
+        }
+    }
+
+    function removeStud(uint _id) public {
+    require(StudExists[_id], "Student with that ID does not exist!");
+
+    for (uint i = 0; i < stud.length; i++) {
+        if (stud[i].id == _id) {
+            for (uint j = i; j < stud.length - 1; j++) {
+                stud[j] = stud[j + 1];
+            }
+            stud.pop();
+            delete StudExists[_id];
+
+            return;
+        }
+    }
+}
+
+// if order is not mandatory we can use below method
+
+function removeStud2(uint _id) public {
+    require(StudExists[_id], "Student with that ID does not exist!");
+
+    for (uint i = 0; i < stud.length; i++) {
+        if (stud[i].id == _id) {
+            // Replace with the last element to avoid shifting elements
+            stud[i] = stud[stud.length - 1];
+            stud.pop();
+
+            // Update the mapping
+            delete StudExists[_id];
+
+            return;
+        }
+    }
+}
+
+
+
+    function getBalance() public view returns(uint) {
+        return address(this).balance;
+    }
+
     fallback() external payable {
-        // Emit an event when the fallback function is triggered
-        emit FallbackTriggered(msg.sender, msg.value);
+        emit FallBackTrigger(msg.sender, msg.value, "Fallback triggered!");
     }
 
-    // Receive function to accept Ether
-    // This function is triggered when Ether is sent to the contract without data
     receive() external payable {
-        // Emit an event when Ether is received by the contract
-        emit EtherReceived(msg.sender, msg.value);
+        emit FallBackTrigger(msg.sender, msg.value, "Receive function triggered!");
     }
 }
