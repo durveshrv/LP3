@@ -1,0 +1,77 @@
+Knapsack :
+Time Complexity: 
+O(n×W)
+Space Complexity: 
+O(n×W)
+
+n is the number of items
+W is the maximum capacity of the knapsack
+
+**************************************
+Huffman Coding :
+>Time complexity of the Huffman coding algorithm is:
+O(n+klogk)
+where 
+n is the length of the input string and 
+k is the number of unique characters.
+
+>space complexity of the algorithm is:
+O(k)
+since each data structure (priority queue, frequency map, Huffman Tree, and code map) depends on the number of unique characters 'k'
+
+******************************************
+Fibonaaci Series
+>Recursive: 
+Time :  O(2^n ), 
+Space : O(n)
+
+>Iterative: 
+Time : O(n), 
+Space : O(1)
+******************************
+NQueens Problem:
+>Time Complexity: Exponential in nature, since we are trying out all ways. To be precise it goes as O(N! ) 
+
+>Space Complexity: O(N^2)
+******************************
+
+QuickSort:
+
+>Time Complexity:
+
+Best Case: (O(n log n)) , Occurs when the pivot element divides the array into two equal halves.
+Average Case (O(n log n)) , On average, the pivot divides the array into two parts, but not necessarily equal.
+Worst Case: (O(n²)), Occurs when the smallest or largest element is always chosen as the pivot (e.g., sorted arrays).
+
+>Auxiliary Space: O(n)
+
+***********************************
+META MASK ACC. NO==
+0x42234533cf8344Ecc171fA31d8ea6f036BC37A5d
+
+12 WORDS:
+earth like little captain ripple dial dune play void sight salute regular
+
+
+
+7f1e8d637843c542bf824b306dc4b05e3390b2c12407e2d11479181be855eafc
+
+
+**************************************************
+
+
+Blockchain is a system for securely storing and sharing information across many computers. It works like a digital ledger, where transactions (or data) are recorded in "blocks," and each block is linked to the previous one, forming a chain.
+
+Key Points:
+
+Decentralized: No single person or organization controls it. It's shared by many computers.
+Secure: Once data is added, it can't be changed, making it tamper-proof.
+Transparent: Everyone can see the same data, ensuring trust.
+
+How It Works:
+Transactions happen (e.g., sending money).
+Verified by multiple computers.
+Added to the blockchain as a new block, linked to the previous one.
+
+MetaMask is a wallet to store and interact with Ether and other assets.
+Ether (ETH) is the cryptocurrency used to pay for transactions and gas on the Ethereum blockchain.
