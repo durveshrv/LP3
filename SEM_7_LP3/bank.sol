@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT  // License identifier, required for open-source projects (MIT license here)
+// SPDX-License-Identifier: MIT  
 pragma solidity ^0.8.0;          // Version declaration for the Solidity compiler, ensuring compatibility with version 0.8.0 or later
 
 contract BankAccount {           // Define a contract named 'BankAccount'

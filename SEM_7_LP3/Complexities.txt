@@ -75,3 +75,11 @@ Added to the blockchain as a new block, linked to the previous one.
 
 MetaMask is a wallet to store and interact with Ether and other assets.
 Ether (ETH) is the cryptocurrency used to pay for transactions and gas on the Ethereum blockchain.
+
+*************************************************************************************8888
+Why smart?
+Trackable and irreversible=Once completed, smart contract transactions are irreversible and can be tracked. 
+
+No third party=Smart contracts don't require a third party, like a lawyer or notary, to attest to their validity. 
+
+ Tamper-proof==Smart contracts are stored on a blockchain, which is a distributed database that makes it difficult to change the terms of the
